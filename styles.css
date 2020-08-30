@@ -1,0 +1,72 @@
+* {
+	box-sizing:border-box;
+}
+
+html,
+body {
+	font-family:sans-serif;
+	background:#222222;
+	color:#eeeeee;
+	display:flex;
+	width: 100vw;
+	height: 100vh;
+	align-items: center;
+	justify-content: center;
+}
+
+h1 {
+	margin-top:0;
+}
+
+ul {
+	padding:0;
+	margin:0;
+}
+ul li {
+	list-style:none;
+}
+
+.dailyTemps {
+	padding-top:2em;
+}
+.dailyTemps li {
+	display:flex;
+	justify-content: space-between;
+	align-items:center;
+}
+
+.main {
+	width:350px;
+	max-width:100%;
+	text-align:center;
+}
+
+.day {
+	width:40%;
+	text-align:left;
+}
+
+.icon-small img {
+	width:40px;
+	height:auto;
+}
+
+.hourly {
+	display:flex;
+	overflow-x: scroll;
+	border-top: 1px solid #666666;
+	border-bottom: 1px solid #666;
+	padding: 10px 0 15px;
+	margin-top: 2em;	
+}
+
+.hourly li {
+	margin:0 15px;
+	text-align:center;
+}
+.icon-hourly {
+	display:block;
+}
+.icon-hourly img {
+	width:30px;
+}
