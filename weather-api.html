@@ -4,11 +4,9 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Weather API Test</title>
-  <meta name="description" content="Weather API Test">
-  <meta name="author" content="jonluhrs.com">
-
-  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <title>Weather API</title>
+  <meta name="description" content="Weather API">
+  <meta name="author" content="Jon Luhrs">
 
   <style>
   	* {
@@ -16,16 +14,18 @@
   	}
   	html,
   	body {
-  		font-family:sans-serif;
-  		background:#333333;
-  		color:#eeeeee;
-  		display:flex;
-		width: 100vw;
-		height: 100vh;
-		align-items: center;
-		justify-content: center;
+			font-family:sans-serif;
+			background:#222222;
+			color:#eeeeee;
+			display:flex;
+			width: 100vw;
+			height: 100vh;
+			align-items: center;
+			justify-content: center;
   	}
   	section {
+  		width:300px;
+  		max-width:100%;
   		text-align:center;
   	}
   	h1 {
@@ -37,9 +37,17 @@
   	}
   	ul li {
   		list-style:none;
-  		margin-bottom:10px;
   		display:flex;
   		justify-content: space-between;
+  		align-items:center;
+  	}
+  	.day {
+  		width:40%;
+  		text-align:left;
+  	}
+  	.icon-small img {
+  		width:40px;
+  		height:auto;
   	}
   </style>
 
@@ -54,12 +62,13 @@
 		<ul class="dailyTemps"></ul>
 	</section>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 		
+		//keys
 		let api_key = 'a4d03999bed35279f6488dcf5b48ef3b';
 		let city_id = '4502103';
 
+		//first request – current weather data
 		let request1 = new XMLHttpRequest();
 		request1.open("GET", "https://api.openweathermap.org/data/2.5/weather?id=" + city_id + "&units=imperial&appid=" + api_key + "");
 		request1.send();
@@ -70,38 +79,35 @@
 
 				//main object
 				let data = JSON.parse(request1.response);
-				console.log(data);
+				//console.log(data);
 
 				//set town name
 				let town = data.name;
 
 				//current temp
-				let currentTemp = data.main.temp;
+				let temp = data.main.temp;
+				let currentTemp = Math.round(temp);
 
+				//weather icon
 				let icon = data.weather[0].icon;
-				console.log(icon);
-
 				let iconImgLink = 'http://openweathermap.org/img/wn/'+ icon +'@2x.png';
-				console.log(iconImgLink)
 
 				//display town name & current temp
 				document.querySelector('.townName').innerHTML = town;			
 				document.querySelector('.currentTemp').innerHTML ='Current Temp: ' + currentTemp + '&deg;F';
 				document.querySelector('.icon').innerHTML = '<img src="'+ iconImgLink +'" />';
 
-
-
 			} else {
 				console.log(`error ${request.status} ${request.statusText}`);
 			}
 		}
 
-
+		//second request – upcoming weather data
 		let request2 = new XMLHttpRequest();
 		request2.open("GET", "https://api.openweathermap.org/data/2.5/onecall?lat=39.891499&lon=-75.037666&exclude=current,minutely,hourly&units=imperial&appid=" + api_key + "");
 		request2.send();
 		request2.onload = () => {
-			//console.log(request2);
+
 			if ( request2.status === 200 ){
 
 				let dailyData = JSON.parse(request2.response);
@@ -142,14 +148,17 @@
 					    dayofweek = "Saturday";
 					}
 
-					let dailyTemp = weather[i].temp.day;
+					//daily temperatures
+					let temps = weather[i].temp.day;
+					let dailyTemp = Math.round(temps);
 
-					// console.log(dayofweek);
-					// console.log(dailyTemp);
+					//weather icon
+					let icon = weather[i].weather[0].icon;
+					let iconImgLink = 'http://openweathermap.org/img/wn/'+ icon +'@2x.png';
 
 					//create list items with daily temperatures
 					let listItem = document.createElement("LI");
-					listItem.innerHTML = "<span class='day'>" + dayofweek + "</span> <span>" + dailyTemp + "&deg;F</span>";
+					listItem.innerHTML = "<span class='day'>" + dayofweek + "</span><span class='icon-small'><img src=" + iconImgLink + " /></span><span>" + dailyTemp + "&deg;F</span>";
 					document.querySelector(".dailyTemps").appendChild(listItem);
 
 				}			
